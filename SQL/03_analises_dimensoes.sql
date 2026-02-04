@@ -18,16 +18,16 @@ SELECT
     produto,
     SUM(faturamento) AS faturamento_total
 FROM vw_vendas_comercial
-GROUP BY produto
+GROUP BY nome_produto
 ORDER BY faturamento_total DESC
 LIMIT 5;
 
 -- Produtos mais vendidos (quantidade)
 SELECT
-    produto,
-    SUM(quantidade) AS unidades_vendidas
+    nome_produto,
+    SUM(qtd_vendida) AS unidades_vendidas
 FROM vw_vendas_comercial
-GROUP BY produto
+GROUP BY nome_produto
 ORDER BY unidades_vendidas DESC;
 
 -- Concentração / risco de faturamento por produto
@@ -39,7 +39,7 @@ SELECT
         (SELECT SUM(faturamento) FROM vw_vendas_comercial) * 100
     , 2) AS percentual_faturamento
 FROM vw_vendas_comercial
-GROUP BY produto
+GROUP BY nome_produto
 ORDER BY percentual_faturamento DESC;
 
 -- Faturamento por loja
@@ -53,11 +53,11 @@ ORDER BY faturamento_total DESC;
 -- Produtos mais vendidos por loja
 SELECT
     loja,
-    produto,
-    SUM(quantidade) AS unidades_vendidas,
+    nome_produto,
+    SUM(qtd_vendida) AS unidades_vendidas,
     SUM(faturamento) AS faturamento_total
 FROM vw_vendas_comercial
-GROUP BY loja, produto
+GROUP BY loja, nome_produto
 ORDER BY loja, faturamento_total DESC;
 
 -- Faturamento por categoria
@@ -70,11 +70,11 @@ ORDER BY faturamento_total DESC;
 
 -- Lucro por categoria
 SELECT
-    categoria,
-    SUM(lucro) AS lucro_total
+    nome_categoria,
+    SUM(faturamento) AS faturamento_total
 FROM vw_vendas_comercial
-GROUP BY categoria
-ORDER BY lucro_total DESC;
+GROUP BY nome_categoria
+ORDER BY faturamento_total DESC;
 
 -- Faturamento por mês
 SELECT
@@ -86,7 +86,7 @@ ORDER BY mes;
 
 -- Quantidade de vendas por mês
 SELECT
-    DATE_TRUNC('month', data_pedido) AS mes,
+    DATE_TRUNC('month', data_venda) AS mes,
     COUNT(DISTINCT pedido_id) AS total_vendas
 FROM vw_vendas_comercial
 GROUP BY mes
