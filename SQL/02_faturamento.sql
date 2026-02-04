@@ -12,21 +12,21 @@ SELECT
     SUM(faturamento) AS faturamento_total
 FROM vw_vendas_comercial;
 
--- Faturamento por ano
+-- Faturamento por categoria
 SELECT
-    EXTRACT(YEAR FROM data_pedido) AS ano,
+    nome_categoria,
     SUM(faturamento) AS faturamento_total
 FROM vw_vendas_comercial
-GROUP BY ano
-ORDER BY ano;
+GROUP BY nome_categoria
+ORDER BY faturamento_total DESC;
+
 
 
 -- Faturamento por mês (ano-mês)
 SELECT
-    DATE_TRUNC('month', data_pedido) AS mes,
+    DATE_TRUNC('month', data_venda) AS mes,
     SUM(faturamento) AS faturamento_total
 FROM vw_vendas_comercial
 GROUP BY mes
 ORDER BY mes;
-
 
