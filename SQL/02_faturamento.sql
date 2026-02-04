@@ -1,11 +1,11 @@
-/*
+---------------------------------------------------------------------------
 Projeto: Análise de Vendas
 Arquivo: 02_faturamento.sql
-
+---------------------------------------------------------------------------
 Objetivo:
 Calcular o faturamento total e o faturamento ao longo do tempo
 para análise de performance comercial.
-*/
+---------------------------------------------------------------------------
 
 -- Faturamento total
 SELECT
