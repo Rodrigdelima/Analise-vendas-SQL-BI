@@ -1,11 +1,11 @@
-/*
+--------------------------------------------------------------------
 Projeto: Análise de Vendas
 Arquivo: 01_exploracao_dados.sql
-
+--------------------------------------------------------------------
 Objetivo:
 Exploração inicial da base de dados para entender o volume
 de registros nas principais tabelas do sistema.
-*/
+--------------------------------------------------------------------
 
 -- Total de pedidos
 SELECT COUNT(*) AS total_pedidos
