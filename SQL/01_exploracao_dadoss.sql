@@ -18,3 +18,8 @@ FROM clientes;
 -- Total de produtos
 SELECT COUNT(*) AS total_produtos
 FROM produtos;
+
+-- Estrutura da tabela pedidos
+SELECT column_name, data_type
+FROM information_schema.columns
+WHERE table_name = 'pedidos';
