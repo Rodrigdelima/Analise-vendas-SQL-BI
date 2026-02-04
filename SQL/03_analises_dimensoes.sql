@@ -1,74 +1,102 @@
---------------------------------------------------
-Projeto: Análise de Vendas
-Arquivo: 03_analises_dimensoes.sql
---------------------------------------------------
+------------------------------------------------------------
+-- MÉTRICAS AVANÇADAS DE NEGÓCIO
+-- Fonte: vw_vendas_comercial
+------------------------------------------------------------
 
-Objetivo:
-Analisar o desempenho de vendas por diferentes
-dimensões do negócio, como categoria de produto,
-loja e região, para identificar padrões e oportunidades.
---------------------------------------------------
-
--- Faturamento por categoria
+-- Lucro total
 SELECT
-    c.nome AS categoria,
-    SUM(p.preco * pe.quantidade) AS faturamento_total
-FROM pedidos pe
-JOIN produtos p
-    ON pe.produto_id = p.produto_id
-JOIN categorias c
-    ON p.categoria_id = c.categoria_id
-GROUP BY c.nome
-ORDER BY faturamento_total DESC;
-
-
--- Faturamento por loja
-SELECT
-    l.nome AS loja,
-    SUM(p.preco * pe.quantidade) AS faturamento_total
-FROM pedidos pe
-JOIN produtos p
-    ON pe.produto_id = p.produto_id
-JOIN lojas l
-    ON pe.loja_id = l.loja_id
-GROUP BY l.nome
-ORDER BY faturamento_total DESC;
-
-
--- Faturamento por região
-SELECT
-    r.nome AS regiao,
-    SUM(p.preco * pe.quantidade) AS faturamento_total
-FROM pedidos pe
-JOIN produtos p
-    ON pe.produto_id = p.produto_id
-JOIN lojas l
-    ON pe.loja_id = l.loja_id
-JOIN regioes r
-    ON l.regiao_id = r.regiao_id
-GROUP BY r.nome
-ORDER BY faturamento_total DESC;
-
-
--- Quantidade de pedidos por categoria
-SELECT
-    c.nome AS categoria,
-    COUNT(pe.pedido_id) AS total_pedidos
-FROM pedidos pe
-JOIN produtos p
-    ON pe.produto_id = p.produto_id
-JOIN categorias c
-    ON p.categoria_id = c.categoria_id
-GROUP BY c.nome
-ORDER BY total_pedidos DESC;
-
-
--- Faturamento total
-SELECT SUM(faturamento) AS faturamento_total
+    SUM(lucro) AS lucro_total
 FROM vw_vendas_comercial;
 
 -- Ticket médio
 SELECT
-    SUM(faturamento) / COUNT(DISTINCT id_pedido) AS ticket_medio
+    SUM(faturamento) / COUNT(DISTINCT pedido_id) AS ticket_medio
 FROM vw_vendas_comercial;
+
+-- Top 5 produtos por faturamento
+SELECT
+    produto,
+    SUM(faturamento) AS faturamento_total
+FROM vw_vendas_comercial
+GROUP BY produto
+ORDER BY faturamento_total DESC
+LIMIT 5;
+
+-- Produtos mais vendidos (quantidade)
+SELECT
+    produto,
+    SUM(quantidade) AS unidades_vendidas
+FROM vw_vendas_comercial
+GROUP BY produto
+ORDER BY unidades_vendidas DESC;
+
+-- Concentração / risco de faturamento por produto
+SELECT
+    produto,
+    SUM(faturamento) AS faturamento_total,
+    ROUND(
+        SUM(faturamento) /
+        (SELECT SUM(faturamento) FROM vw_vendas_comercial) * 100
+    , 2) AS percentual_faturamento
+FROM vw_vendas_comercial
+GROUP BY produto
+ORDER BY percentual_faturamento DESC;
+
+-- Faturamento por loja
+SELECT
+    loja,
+    SUM(faturamento) AS faturamento_total
+FROM vw_vendas_comercial
+GROUP BY loja
+ORDER BY faturamento_total DESC;
+
+-- Produtos mais vendidos por loja
+SELECT
+    loja,
+    produto,
+    SUM(quantidade) AS unidades_vendidas,
+    SUM(faturamento) AS faturamento_total
+FROM vw_vendas_comercial
+GROUP BY loja, produto
+ORDER BY loja, faturamento_total DESC;
+
+-- Faturamento por categoria
+SELECT
+    categoria,
+    SUM(faturamento) AS faturamento_total
+FROM vw_vendas_comercial
+GROUP BY categoria
+ORDER BY faturamento_total DESC;
+
+-- Lucro por categoria
+SELECT
+    categoria,
+    SUM(lucro) AS lucro_total
+FROM vw_vendas_comercial
+GROUP BY categoria
+ORDER BY lucro_total DESC;
+
+-- Faturamento por mês
+SELECT
+    DATE_TRUNC('month', data_pedido) AS mes,
+    SUM(faturamento) AS faturamento_total
+FROM vw_vendas_comercial
+GROUP BY mes
+ORDER BY mes;
+
+-- Quantidade de vendas por mês
+SELECT
+    DATE_TRUNC('month', data_pedido) AS mes,
+    COUNT(DISTINCT pedido_id) AS total_vendas
+FROM vw_vendas_comercial
+GROUP BY mes
+ORDER BY mes;
+
+-- Faturamento por região
+SELECT
+    regiao,
+    SUM(faturamento) AS faturamento_total
+FROM vw_vendas_comercial
+GROUP BY regiao
+ORDER BY faturamento_total DESC;
 
