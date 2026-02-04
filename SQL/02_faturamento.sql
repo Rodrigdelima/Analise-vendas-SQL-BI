@@ -9,24 +9,24 @@ para análise de performance comercial.
 
 -- Faturamento total
 SELECT
-  SUM(p.preco * pe.quantidade) AS faturamento_total
-FROM pedidos pe
-JOIN produtos p ON pe.produto_id = p.produto_id;
+    SUM(faturamento) AS faturamento_total
+FROM vw_vendas_comercial;
 
 -- Faturamento por ano
 SELECT
-  EXTRACT(YEAR FROM pe.data_pedido) AS ano,
-  SUM(p.preco * pe.quantidade) AS faturamento
-FROM pedidos pe
-JOIN produtos p ON pe.produto_id = p.produto_id
+    EXTRACT(YEAR FROM data_pedido) AS ano,
+    SUM(faturamento) AS faturamento_total
+FROM vw_vendas_comercial
 GROUP BY ano
 ORDER BY ano;
 
+
 -- Faturamento por mês (ano-mês)
 SELECT
-  DATE_TRUNC('month', pe.data_pedido) AS mes,
-  SUM(p.preco * pe.quantidade) AS faturamento
-FROM pedidos pe
-JOIN produtos p ON pe.produto_id = p.produto_id
+    DATE_TRUNC('month', data_pedido) AS mes,
+    SUM(faturamento) AS faturamento_total
+FROM vw_vendas_comercial
 GROUP BY mes
 ORDER BY mes;
+
+
