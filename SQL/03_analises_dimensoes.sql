@@ -61,3 +61,14 @@ JOIN categorias c
     ON p.categoria_id = c.categoria_id
 GROUP BY c.nome
 ORDER BY total_pedidos DESC;
+
+
+-- Faturamento total
+SELECT SUM(faturamento) AS faturamento_total
+FROM vw_vendas_comercial;
+
+-- Ticket médio
+SELECT
+    SUM(faturamento) / COUNT(DISTINCT id_pedido) AS ticket_medio
+FROM vw_vendas_comercial;
+
