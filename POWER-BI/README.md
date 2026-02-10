@@ -3,7 +3,7 @@
 Este dashboard foi desenvolvido a partir de uma VIEW consolidada em SQL, criada especificamente para consumo no Power BI.
 
 ## Objetivo
-Apresentar uma visão executiva do desempenho de vendas, permitindo análise rápida de faturamento, lucro e eficiência comercial.
+Apresentar uma visão ampla do desempenho de vendas, permitindo análise rápida de faturamento, lucro e eficiência comercial.
 
 ## KPIs apresentados
 - Faturamento Total
